@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%
+%% B U F F E R %%
+%%%%%%%%%%%%%%%%%
+
+\subsection{Buffer}
+\label{subsec:buffer}
+
+Buffer is a FIFO with a bypass path used to temporarily store incoming transactions. When the buffer is empty, a valid transaction can bypass the storage element and be passed directly to the output without additional latency. If the output is not ready to accept the transaction, it is stored in the FIFO and remains there until it can be forwarded.
+
+\begin{table}[H]
+	\centering
+	\small
+	\begin{tabularx}{\textwidth}{l c c X}
+		\toprule
+		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\midrule
+		
+		\verb|DATA_WIDTH| &
+		Positive integer &
+		\verb|32| &
+		Width of the transaction data stored in the buffer. \\
+		
+		\verb|FIFO_DEPTH| &
+		Positive integer &
+		\verb|1| &
+		Maximum number of transactions that can be stored in the FIFO. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Buffer parameters}
+	\label{tab:buffer_parameters}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\small
+	\begin{tabularx}{\textwidth}{l c c X}
+		\toprule
+		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\midrule
+		
+		\verb|valid_i| &
+		Input &
+		\verb|1| &
+		Indicates that a valid transaction is available at the input. \\
+		
+		\verb|ready_o| &
+		Output &
+		\verb|1| &
+		Indicates that the buffer can accept a new transaction. \\
+		
+		\verb|data_i| &
+		Input &
+		\verb|DATA_WIDTH| &
+		Transaction data to be stored in the buffer. \\
+		
+		\verb|valid_o| &
+		Output &
+		\verb|1| &
+		Indicates that a valid transaction is available at the output. \\
+		
+		\verb|ready_i| &
+		Input &
+		\verb|1| &
+		Indicates that the downstream logic is ready to accept a transaction. \\
+		
+		\verb|data_o| &
+		Output &
+		\verb|DATA_WIDTH| &
+		Transaction data provided at the output. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Buffer ports}
+	\label{tab:buffer_ports}
+\end{table}

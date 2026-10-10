@@ -1,0 +1,205 @@
+\section{Ports Description}
+
+The cache acts as an AXI4-Lite slave on the CPU side and as an AXI4-Lite master on the external memory side. The following table describes all ports of the cache and their respective directions, widths, and functions.
+
+\begin{table}[htbp]
+	\centering
+	\label{tab:cache_ports}
+	\small
+	\begin{tabularx}{\textwidth}{l c c X}
+		\toprule
+		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\midrule
+		
+		\verb|clk_i| &
+		Input &
+		\verb|1| &
+		System clock used to synchronize the cache operation. \\
+		
+		\verb|rstn_i| &
+		Input &
+		\verb|1| &
+		Active-low synchronous reset signal. \\
+		
+		\midrule
+		\multicolumn{4}{l}{\textbf{CPU-side AXI4-Lite interface}} \\
+		\midrule
+		
+		\verb|s_axi_awaddr_i| &
+		Input &
+		\verb|ADDR_WIDTH| &
+		Write address provided by the CPU. \\
+		
+		\verb|s_axi_awvalid_i| &
+		Input &
+		\verb|1| &
+		Indicates that a valid write address is available. \\
+		
+		\verb|s_axi_awready_o| &
+		Output &
+		\verb|1| &
+		Indicates that the cache is ready to accept a write address. \\
+		
+		\verb|s_axi_wdata_i| &
+		Input &
+		\verb|DATA_WIDTH| &
+		Write data provided by the CPU. \\
+		
+		\verb|s_axi_wstrb_i| &
+		Input &
+		\verb|DATA_WIDTH / 8| &
+		Write byte strobes indicating which bytes of the write data are valid. \\
+		
+		\verb|s_axi_wvalid_i| &
+		Input &
+		\verb|1| &
+		Indicates that valid write data is available. \\
+		
+		\verb|s_axi_wready_o| &
+		Output &
+		\verb|1| &
+		Indicates that the cache is ready to accept write data. \\
+		
+		\verb|s_axi_bresp_o| &
+		Output &
+		\verb|2| &
+		Write response indicating the result of the write transaction. \\
+		
+		\verb|s_axi_bvalid_o| &
+		Output &
+		\verb|1| &
+		Indicates that a valid write response is available. \\
+		
+		\verb|s_axi_bready_i| &
+		Input &
+		\verb|1| &
+		Indicates that the CPU is ready to accept the write response. \\
+		
+		\verb|s_axi_araddr_i| &
+		Input &
+		\verb|ADDR_WIDTH| &
+		Read address provided by the CPU. \\
+		
+		\verb|s_axi_arvalid_i| &
+		Input &
+		\verb|1| &
+		Indicates that a valid read address is available. \\
+		
+		\verb|s_axi_arready_o| &
+		Output &
+		\verb|1| &
+		Indicates that the cache is ready to accept a read address. \\
+		
+		\verb|s_axi_rdata_o| &
+		Output &
+		\verb|DATA_WIDTH| &
+		Read data returned to the CPU. \\
+		
+		\verb|s_axi_rresp_o| &
+		Output &
+		\verb|2| &
+		Read response indicating the result of the read transaction. \\
+		
+		\verb|s_axi_rvalid_o| &
+		Output &
+		\verb|1| &
+		Indicates that valid read data is available. \\
+		
+		\verb|s_axi_rready_i| &
+		Input &
+		\verb|1| &
+		Indicates that the CPU is ready to accept the read data. \\
+		
+		\midrule
+		\multicolumn{4}{l}{\textbf{External memory-side AXI4-Lite interface}} \\
+		\midrule
+		
+		\verb|m_axi_awaddr_o| &
+		Output &
+		\verb|ADDR_WIDTH| &
+		Write address provided to the external memory. \\
+		
+		\verb|m_axi_awvalid_o| &
+		Output &
+		\verb|1| &
+		Indicates that a valid write address is available. \\
+		
+		\verb|m_axi_awready_i| &
+		Input &
+		\verb|1| &
+		Indicates that the external memory is ready to accept a write address. \\
+		
+		\verb|m_axi_wdata_o| &
+		Output &
+		\verb|DATA_WIDTH| &
+		Write data provided to the external memory. \\
+		
+		\verb|m_axi_wstrb_o| &
+		Output &
+		\verb|DATA_WIDTH / 8| &
+		Write byte strobes indicating which bytes of the write data are valid. \\
+		
+		\verb|m_axi_wvalid_o| &
+		Output &
+		\verb|1| &
+		Indicates that valid write data is available. \\
+		
+		\verb|m_axi_wready_i| &
+		Input &
+		\verb|1| &
+		Indicates that the external memory is ready to accept write data. \\
+		
+		\verb|m_axi_bresp_i| &
+		Input &
+		\verb|2| &
+		Write response returned by the external memory. \\
+		
+		\verb|m_axi_bvalid_i| &
+		Input &
+		\verb|1| &
+		Indicates that a valid write response is available. \\
+		
+		\verb|m_axi_bready_o| &
+		Output &
+		\verb|1| &
+		Indicates that the cache is ready to accept the write response. \\
+		
+		\verb|m_axi_araddr_o| &
+		Output &
+		\verb|ADDR_WIDTH| &
+		Read address provided to the external memory. \\
+		
+		\verb|m_axi_arvalid_o| &
+		Output &
+		\verb|1| &
+		Indicates that a valid read address is available. \\
+		
+		\verb|m_axi_arready_i| &
+		Input &
+		\verb|1| &
+		Indicates that the external memory is ready to accept a read address. \\
+		
+		\verb|m_axi_rdata_i| &
+		Input &
+		\verb|DATA_WIDTH| &
+		Read data returned by the external memory. \\
+		
+		\verb|m_axi_rresp_i| &
+		Input &
+		\verb|2| &
+		Read response returned by the external memory. \\
+		
+		\verb|m_axi_rvalid_i| &
+		Input &
+		\verb|1| &
+		Indicates that valid read data is available. \\
+		
+		\verb|m_axi_rready_o| &
+		Output &
+		\verb|1| &
+		Indicates that the cache is ready to accept the read data. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Cache ports}
+\end{table}

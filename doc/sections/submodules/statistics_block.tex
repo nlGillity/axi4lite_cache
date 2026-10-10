@@ -1,0 +1,63 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% S T A T I S T I C S    B L O C K %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Statistics Block}
+\label{subsec:statistics_block}
+
+The Statistics Block provides cache hit and miss statistics for simulation and performance analysis. It receives hit and miss information from the \Comparator and maintains separate counters for cache hits and misses.
+
+The block is enabled by the \verb|DEBUG_ON| parameter. When \verb|DEBUG_ON| is set to \verb|0|, the block is disabled and does not affect the cache implementation.
+
+\begin{table}[H]
+	\centering
+	\small
+	\begin{tabularx}{\textwidth}{l c c X}
+		\toprule
+		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\midrule
+		
+		\verb|WIDTH| &
+		Positive integer &
+		\verb|32| &
+		Width of the registers used to store the number of cache hits and misses. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Statistics Block parameters}
+	\label{tab:statistics_block_parameters}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\label{tab:statistics_block_ports}
+	\small
+	\begin{tabularx}{\textwidth}{l c c X}
+		\toprule
+		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\midrule
+		
+		\verb|valid_i| &
+		Input &
+		\verb|1| &
+		Indicates that the current cache access is valid. \\
+		
+		\verb|hit_i| &
+		Input &
+		\verb|1| &
+		Indicates whether the current cache access resulted in a hit. \\
+		
+		\verb|hit_count_o| &
+		Output &
+		\verb|WIDTH| &
+		Number of recorded cache hits. \\
+		
+		\verb|miss_count_o| &
+		Output &
+		\verb|WIDTH| &
+		Number of recorded cache misses. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Statistics Block ports}
+\end{table}

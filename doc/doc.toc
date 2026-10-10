@@ -1,0 +1,23 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Characteristics}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Functional Description}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Request Fetching}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Read Operation}{4}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Read Hit}{4}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Read Miss}{4}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}Write Operation}{4}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Write Hit}{4}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Write Miss}{5}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}Hits Counting}{5}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Clock and Reset}{5}{section.3}%
+\contentsline {section}{\numberline {4}Parameters}{5}{section.4}%
+\contentsline {section}{\numberline {5}Ports Description}{6}{section.5}%
+\contentsline {section}{\numberline {6}Submodules}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Comparator}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Evicting Block}{8}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Pseudo-Random Generator}{9}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Data Memory}{10}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Tag Memory}{11}{subsection.6.5}%
+\contentsline {subsection}{\numberline {6.6}Arbiter}{12}{subsection.6.6}%
+\contentsline {subsection}{\numberline {6.7}Buffer}{13}{subsection.6.7}%
+\contentsline {subsection}{\numberline {6.8}Statistics Block}{13}{subsection.6.8}%

@@ -1,0 +1,49 @@
+\section{Introduction}
+
+The AXI4-Lite Cache is a parameterizable set-associative cache designed to reduce the average memory access latency between a processor and an external memory system.
+
+\subsection{Characteristics}
+This subsection describes the main features and capabilities supported by the AXI4-Lite Cache.
+
+\begin{table}[htbp]
+	\centering
+	\label{tab}
+	\small
+	\begin{tabularx}{\textwidth}{l X}
+		\toprule
+		\textbf{Characteristic} & \textbf{Description} \\
+		\midrule
+		
+		Configurable Associativity &
+		Configurable number of cache ways. \\
+		
+		Configurable Address and Data Widths &
+		Configurable address and data widths. \\
+		
+		Configurable Number of Sets &
+		Configurable number of cache sets. \\
+		
+		Write-Through Policy with no-allocation&
+		Writes are immediately propagated to external memory. \\
+		
+		NMRU Replacement Policy &
+		Approximation of LRU based on the Not Most Recently Used (NMRU) policy. \\
+		
+		Data-Width Cache Line &
+		Cache line size is equal to the data width. \\
+		
+		AXI4-Lite Interface &
+		AXI4-Lite interfaces on the CPU and external memory sides. \\
+		
+		No Outstanding Transactions &
+		Only one cache transaction can be processed at a time.. \\
+		
+		Hit/Miss Statistics &
+		Hit and miss counters are available during simulation only. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Cache characteristics}
+\end{table}
+
+% --- SECTION 2 ---

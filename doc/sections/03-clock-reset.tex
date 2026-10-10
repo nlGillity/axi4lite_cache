@@ -1,0 +1,5 @@
+\section{Clock and Reset}
+
+The AXI4-Lite Cache operates within a single clock domain and a single reset domain. No clock domain crossings are present. The cache uses the \verb|clk_i| signal as its clock and the \verb|rstn_i| signal as an active-low synchronous reset.
+
+During reset, the entire \TagMemory is cleared, including all stored tags and valid bits. The contents of the \DataMemory do not need to be reset, as they are considered invalid until a corresponding valid entry is created in the \TagMemory.

@@ -1,0 +1,66 @@
+\section{Parameters}
+
+The following table lists the parameters used to configure the AXI4-Lite Cache implementation.
+
+\begin{table}[htbp]
+	\centering
+	\small
+	\begin{tabularx}{\textwidth}{l c c X}
+		\toprule
+		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\midrule
+		
+		\verb|ADDR_WIDTH| &
+		Positive integer &
+		\verb|32| &
+		Width of the memory address. \\
+		
+		\verb|DATA_WIDTH| &
+		32, 64 &
+		\verb|32| &
+		Width of the data bus. \\
+		
+		\verb|SET_NUM| &
+		Power of 2 &
+		\verb|4| &
+		Number of cache sets. \\
+		
+		\verb|WAY_NUM| &
+		Power of 2 &
+		\verb|4| &
+		Number of cache ways (associativity). \\
+		
+		\verb|DEBUG_ON| &
+		0, 1 &
+		\verb|0| &
+		Enables the \StatisticsBlock when set to \verb|1|. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{RTL configuration parameters}
+	\label{tab:rtl_parameters}
+\end{table}
+
+The following auxiliary parameters are introduced for documentation purposes only. They are used to simplify the description of signal widths and cache organization and do not represent parameters of the RTL implementation.
+
+\begin{table}[htbp]
+	\centering
+	\small
+	\begin{tabularx}{\textwidth}{l c X}
+		\toprule
+		\textbf{Parameter} & \textbf{Definition} & \textbf{Description} \\
+		\midrule
+		
+		\verb|SET_WIDTH| &
+		$\log_2(\text{\verb|SET_NUM|})$ &
+		Width of the cache set index. \\
+		
+		\verb|WAY_WIDTH| &
+		$\log_2(\text{\verb|WAY_NUM|})$ &
+		Width of the way index. \\
+		
+		\bottomrule
+	\end{tabularx}
+	\caption{Auxiliary documentation parameters}
+	\label{tab:documentation_parameters}
+\end{table}

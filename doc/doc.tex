@@ -1,0 +1,62 @@
+\documentclass[10pt,letterpaper]{article}
+
+% Packages and styling live in preamble.tex; each section has its own file under
+% sections/. Edit those directly — this file is the outline of the document.
+\input{preamble}
+
+\begin{document}
+	
+	% --- COVER PAGE ---
+	\thispagestyle{empty}
+	
+	\begin{tikzpicture}[remember picture, overlay]
+		% Top decorative banner
+	\end{tikzpicture}
+	
+	\vspace{3.5cm}
+	
+	\begin{flushleft}
+		{\Huge\sffamily\bfseries\color{NavyBlue}AXI4-Lite Cache\par}
+		\vspace{0.4cm}
+		{\Large\sffamily\bfseries\color{OrangeAccent}Microarchitectural Specification\par}
+		\vspace{0.4cm}
+		\noindent\rule{\textwidth}{1.5pt}
+	\end{flushleft}
+	
+	\vfill
+	
+	\begin{tcolorbox}[
+		colback=WarmBg,
+		colframe=BorderColor,
+		arc=4pt,
+		boxrule=1pt,
+		width=\textwidth
+		]
+		\sffamily
+		\begin{tabularx}{\textwidth}{@{}l X l X@{}}
+			\textbf{Doc Identifier:} & AXI4LITE-CACHE & \textbf{Release Date:} & October 09, 2026 \\
+			\textbf{Version:}        & Rev 1.0 & \textbf{Status:}       & Review \\
+			\textbf{Author:} & Danil Zavarnitsyn & \textbf{Reviewer:}    & Maria Stepanova
+		\end{tabularx}
+	\end{tcolorbox}
+	
+	\newpage
+	
+	% --- TABLE OF CONTENTS ---
+	\tableofcontents
+	\vspace{1cm}
+	
+	% --- SECTIONS ---
+	\input{sections/01-introduction}
+	\newpage
+	\input{sections/02-functional}
+	\input{sections/03-clock-reset}
+	\input{sections/05-parameters}
+	\newpage
+	\input{sections/04-ports}
+	\newpage
+	\input{sections/06-submodules}
+	%\newpage
+	%\input{sections/07-waveforms}
+	
+\end{document}

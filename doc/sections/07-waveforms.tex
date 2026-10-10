@@ -1,0 +1,35 @@
+\section{Waveforms}
+
+This section illustrates the timing and sequence of AXI4-Lite transactions during different cache operations. The waveforms show the interaction between the CPU, the cache, and the external memory for cache hits, cache misses, and write operations.
+
+\vspace*{\fill}
+\begin{figure}[h]
+	\includegraphics[width=16cm]{read_hit.png}
+	\caption{Read hit waveform}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{read_miss.png}
+	\caption{Read miss waveform (without eviction)}
+\end{figure}
+\vspace*{\fill}
+
+\newpage
+
+\vspace*{\fill}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=13cm]{write_hit.png}
+	\caption{Write waveform}
+\end{figure}
+\vspace*{\fill}
+
+\newpage
+
+\vspace*{\fill}
+\begin{figure}[ht]
+	\includegraphics[width=17cm]{comb.png}
+	\caption{Sequence of a write and read operation to the same address (the address was initially present in the tag memory)}
+\end{figure}
+\vspace*{\fill}
