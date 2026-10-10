@@ -33,4 +33,8 @@ module arbiter #(
   assign ready_a_o = ready_i && !channel_o;
   assign ready_b_o = ready_i &&channel_o;
   assign data_o    = channel_o ? data_b_i : data_a_i;
+
+  `ifdef FORMAL
+  `include "arbiter_sva.sv";
+  `endif
 endmodule : arbiter
