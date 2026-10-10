@@ -1,0 +1,15 @@
+[options]
+mode prove
+depth 5
+
+[engines]
+smtbmc --syn --nopresat z3
+
+[script]
+read_verilog -sv -formal comparator.sv
+hierarchy -check -top comparator -chparam TAG_WIDTH 32 -chparam WAY_NUM 4
+prep -top comparator
+
+[files]
+comparator.sv
+comparator_sva.sv

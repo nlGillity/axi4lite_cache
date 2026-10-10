@@ -26,4 +26,8 @@ module comparator #(
 
   assign hit_o     = |comp_res;
   assign hit_way_o = comp_res;
+
+  `ifdef FORMAL
+  `include "comparator_sva.sv";
+  `endif
 endmodule : comparator
