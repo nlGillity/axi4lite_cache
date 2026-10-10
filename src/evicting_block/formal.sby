@@ -1,0 +1,15 @@
+[options]
+mode prove
+depth 100
+
+[engines]
+smtbmc --syn --nopresat z3
+
+[script]
+read_verilog -sv -formal evicting_block.sv 
+hierarchy -check -top evicting_block -chparam SET_NUM 8 -chparam WAY_NUM 4
+prep -top evicting_block
+
+[files]
+evicting_block.sv
+evicting_block_sva.sv
