@@ -1,0 +1,15 @@
+[options]
+mode prove
+depth 100
+
+[engines]
+smtbmc --syn --nopresat z3
+
+[script]
+read_verilog -sv -formal prg.sv 
+hierarchy -check -top prg -chparam LFSR_WIDTH 4 -chparam LFSR_POLY 'b00000000
+prep -top prg
+
+[files]
+prg.sv
+prg_sva.sv
