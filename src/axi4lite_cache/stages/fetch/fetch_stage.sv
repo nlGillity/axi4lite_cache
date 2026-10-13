@@ -191,7 +191,7 @@ module fetch_stage #(
     .pop_i       ( m_axi_wready_i & ~ext_w_empty        )
   );
 
-  // `ifdef FORMAL
-  // `include "fetch_stage_sva.sv";
-  // `endif
+  `ifdef FORMAL
+  `include "fetch_stage_sva.sv";
+  `endif
 endmodule : fetch_stage
