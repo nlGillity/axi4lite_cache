@@ -2,15 +2,14 @@ module evicting_block #(
   parameter  int unsigned SET_NUM,
   parameter  int unsigned WAY_NUM,
 
-  parameter  int unsigned LFSR_POLY  = 1,
+  parameter  int unsigned LFSR_POLY  = 32'b1111_1111,
   parameter  int unsigned LFSR_WIDTH = $clog2(WAY_NUM),
 
   localparam int unsigned SET_WIDTH = $clog2(SET_NUM),
-  localparam int unsigned WAY_WIDTH = $clog2(WAY_NUM),
+  localparam int unsigned WAY_WIDTH = $clog2(WAY_NUM)
 )(
   input  logic                   clk,
   input  logic                   rst_n,
-
   input  logic [SET_WIDTH - 1:0] examine_set_i,
   input  logic [WAY_WIDTH - 1:0] hit_way_i,
   input  logic                   valid_i,
@@ -59,6 +58,8 @@ module evicting_block #(
     .LFSR_WIDTH   ( LFSR_WIDTH  ),
     .LFSR_POLY    ( LFSR_POLY   )
   ) prg_inst (
+    .clk          ( clk         ),
+    .rst_n        ( rst_n       ),
     .exception_i  ( examine_mru ),
     .valid_i      ( valid_miss  ),
     .victim_way_o ( victim_way  )

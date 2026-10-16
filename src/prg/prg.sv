@@ -4,7 +4,6 @@ module prg #(
 )(
   input  logic                    clk,
   input  logic                    rst_n,
-
   input  logic [LFSR_WIDTH - 1:0] exception_i,
   input  logic                    valid_i,
   output logic [LFSR_WIDTH - 1:0] victim_way_o
@@ -12,13 +11,11 @@ module prg #(
 
   logic [LFSR_WIDTH - 1:0] stage_ff;
   wire  [LFSR_WIDTH - 1:0] stage_out;
-  wire  [LFSR_WIDTH - 1:0] poly;
+  logic [LFSR_WIDTH - 1:0] poly;
 
   generate
     for (genvar i = 0; i < LFSR_WIDTH; i++) begin
-        assign stage_out[i] = (stage_ff[i] == exception_i[i]) 
-                            ? ~(exception_i[i] & stage_ff[i]) 
-                            : ~exception_i[i];
+        assign stage_out[i] = ~(stage_ff[i] & exception_i[i]);
     end
   endgenerate
 

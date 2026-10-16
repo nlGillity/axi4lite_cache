@@ -19,6 +19,7 @@ module tag_memory #(
   input  logic [           SET_WIDTH - 1:0] write_set_i,
   input  logic [           WAY_WIDTH - 1:0] write_way_i,
   input  logic [           TAG_WIDTH - 1:0] write_tag_i,
+  input  logic                              write_v_i,
 
   output logic [WAY_NUM * WORD_WIDTH - 1:0] tags_o
 );
@@ -65,7 +66,7 @@ module tag_memory #(
         .csb1      ( ~way_onehot[i]                       ),
         .web1      ( ~write_en_i                          ),
         .addr1     ( write_set_i                          ),
-        .din1      ( {1'b1, write_tag_i}                  ),
+        .din1      ( {write_v_i, write_tag_i}             ),
         .strb1     ( {WORD_WIDTH{1'b1}}                   )
       );
     end

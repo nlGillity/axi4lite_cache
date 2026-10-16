@@ -4,19 +4,17 @@ module data_memory #(
   parameter int unsigned WAY_NUM    = 4,
 
   localparam int unsigned SET_WIDTH  = $clog2(SET_NUM),
-  localparam int unsigned WAY_WIDTH  = $clog2(WAY_NUM),
+  localparam int unsigned WAY_WIDTH  = $clog2(WAY_NUM)
 )(
   input  logic                              clk,
-
-  input  logic                              read_en_i
+  input  logic                              read_en_i,
   input  logic [           SET_WIDTH - 1:0] read_set_i,
   output logic [WAY_NUM * DATA_WIDTH - 1:0] data_o,
-
   input  logic                              write_en_i,
   input  logic [           SET_WIDTH - 1:0] write_set_i,
   input  logic [           WAY_WIDTH - 1:0] write_way_i,
   input  logic [          DATA_WIDTH - 1:0] write_data_i,
-  input  logic [          DATA_WIDTH - 1:0] write_strb_i,
+  input  logic [          DATA_WIDTH - 1:0] write_strb_i
 );
 
   logic [WAY_NUM - 1:0] way_onehot;

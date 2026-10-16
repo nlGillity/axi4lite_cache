@@ -39,7 +39,9 @@ module fetch_stage #(
   input  logic                    fm_ready_i,
   output logic                    fm_valid_o,
   output logic                    fm_is_write_o,
-  output logic [ADDR_WIDTH - 1:0] fm_addr_o
+  output logic [ADDR_WIDTH - 1:0] fm_addr_o,
+  output logic [DATA_WIDTH - 1:0] fm_data_o,
+  output logic [STRB_WIDTH - 1:0] fm_strb_o
 );
 
   // ===========================================================================
@@ -83,7 +85,7 @@ module fetch_stage #(
   wire ext_w_empty;
 
   // ===========================================================================
-  // Aribter-Buffers organization
+  // Aribter-Buffers organization (to Memory)
   // ===========================================================================
 
   assign arb_wr_valid = (aw_valid & w_valid)          // buffers have valid data 
@@ -145,6 +147,9 @@ module fetch_stage #(
     .valid_o    ( fm_valid_o      ),
     .data_o     ( fm_addr_o       )
   );
+
+  assign fm_data_o = w_data;
+  assign fm_strb_o = w_strb;
 
   // ===========================================================================
   // To extenral memory
