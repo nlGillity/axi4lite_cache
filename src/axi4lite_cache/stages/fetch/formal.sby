@@ -1,0 +1,37 @@
+[options]
+mode prove
+depth 20
+
+[engines]
+smtbmc --syn --nopresat z3
+
+[script]
+read_slang --top fetch_stage -D FORMAL -I . \
+  fetch_stage.sv \
+  buffer.sv \
+  arbiter.sv \
+  cc_pkg.sv \
+  cc_stream_fifo.sv \
+  cc_fifo.sv
+
+prep -top fetch_stage
+
+[files]
+# Design under verification
+fetch_stage.sv
+fetch_stage_sva.sv
+
+# Project dependencies
+../../../buffer/buffer.sv
+../../../arbiter/arbiter.sv
+../../../arbiter/arbiter_sva.sv
+
+# common_cells RTL
+../../../common_cells/src/cc_pkg.sv
+../../../common_cells/src/cc_stream_fifo.sv
+../../../common_cells/src/cc_fifo.sv
+
+# common_cells headers
+common_cells/assertions.svh          ../../../common_cells/include/common_cells/assertions.svh
+common_cells/registers.svh           ../../../common_cells/include/common_cells/registers.svh
+common_cells/deprecated/registers.svh ../../../common_cells/include/common_cells/deprecated/registers.svh
