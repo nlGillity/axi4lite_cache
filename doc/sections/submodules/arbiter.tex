@@ -5,14 +5,14 @@
 \subsection{Arbiter}
 \label{subsec:arbiter}
 
-The Arbiter controls access to the memory interface shared by read and write requests. It implements a round-robin arbitration policy.
+Arbiter распределяет общий интерфейс памяти между чтением и записью по стратегии Round-Robin.
 
-The arbiter maintains a priority state indicating which request type has priority when read (channel $a$) and write (channel $b$) requests are asserted simultaneously. When only one request is active, that request is granted regardless of the current priority. When both requests are active, the request with the current priority is granted. After a request is granted, the priority is updated to favor the other request type.
+Если активен один запрос, Arbiter обслуживает его независимо от приоритета. При одновременном чтении (канал $a$) и записи (канал $b$) выбирается запрос с текущим приоритетом. После обслуживания приоритет передаётся другому типу запроса.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=7cm]{Arbiter.png}
-	\caption{Round-Robin arbiter scheme}
+	\caption{Схема модуля Arbiter}
 \end{figure}
 
 \begin{table}[H]
@@ -20,17 +20,17 @@ The arbiter maintains a priority state indicating which request type has priorit
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\textbf{Параметр} & \textbf{Допустимые значения} & \textbf{По умолчанию} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|DATA_WIDTH| &
-		Positive integer &
+		Положительное целое &
 		\verb|32| &
-		Width of the transaction data path. \\
+		Разрядность тракта данных транзакции. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Round-Robin Arbiter parameters}
+	\caption{Параметры циклического арбитра}
 	\label{tab:round_robin_arbiter_parameters}
 \end{table}
 
@@ -40,50 +40,50 @@ The arbiter maintains a priority state indicating which request type has priorit
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\textbf{Порты} & \textbf{Направление} & \textbf{Разрядность} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|ready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the downstream logic is ready to accept the selected transaction. \\
+		Готовность последующей логики принять выбранную транзакцию. \\
 		
 		\verb|valid_a_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that a valid transaction is available on channel A. \\
+		Наличие достоверной транзакции в канале A. \\
 		
 		\verb|data_a_i| &
-		Input &
+		Вход &
 		\verb|DATA_WIDTH| &
-		Transaction data provided on channel A. \\
+		Данные транзакции в канале A. \\
 		
 		\verb|valid_b_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that a valid transaction is available on channel B. \\
+		Наличие достоверной транзакции в канале B. \\
 		
 		\verb|data_b_i| &
-		Input &
+		Вход &
 		\verb|DATA_WIDTH| &
-		Transaction data provided on channel B. \\
+		Данные транзакции в канале B. \\
 		
 		\verb|ready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that arbiter is ready. \\
+		Готовность арбитра. \\
 		
 		\verb|valid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that a valid transaction is available at the output. \\
+		Наличие достоверной транзакции на выходе. \\
 		
 		\verb|data_o| &
-		Output &
+		Выход &
 		\verb|DATA_WIDTH| &
-		Transaction data selected by the arbiter. \\
+		Данные транзакции, выбранной арбитром. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Round-Robin Arbiter ports}
+	\caption{Порты модуля Arbiter}
 \end{table}

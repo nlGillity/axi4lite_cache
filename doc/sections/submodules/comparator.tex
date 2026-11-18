@@ -5,36 +5,36 @@
 \subsection{Comparator}
 \label{subsec:comparator}
 
-The Comparator module is responsible for determining whether the requested tag is present in the selected cache set. The module receives the requested tag and the array of tags corresponding to all ways of the selected set from the Tag Memory.
+Блок сравнения ищет запрашиваемый тег среди тегов всех секций выбранного набора, полученных из памяти тегов.
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\includegraphics[width=16cm]{Comparator.png}
-	\caption{Comparator scheme (4-way cache)}
+	\caption{Схема блока сравнения (четырёхсекционный кэш)}
 \end{figure}
 
-The comparison is performed in parallel. For each way, a dedicated comparator compares the tag stored in the corresponding way with the requested tag. The results of the individual comparisons form a match vector. Each bit of this vector corresponds to one way and is asserted when the tag stored in the corresponding way matches the requested tag. Thus, the output of the module represents the location of the matching tag using a one-hot encoding.
+Каждая секция имеет отдельный компаратор. Сравнения выполняются параллельно и формируют унитарную маску совпадений: бит секции установлен, если её тег совпал с запрашиваемым.
 
 \begin{table}[htbp]
 	\centering
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\textbf{Параметр} & \textbf{Допустимые значения} & \textbf{По умолчанию} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|TAG_WIDTH| &
-		Positive integer &
+		Положительное целое &
 		--- &
-		Width of the cache tag. \\
+		Разрядность тега кэша. \\
 		
 		\verb|WAY_NUM| &
-		Positive integer &
+		Положительное целое &
 		--- &
-		Number of cache ways compared in parallel. \\
+		Число параллельно сравниваемых секций. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Comparator parameters}
+	\caption{Параметры модуля Comparator}
 	\label{tab:comparator_parameters}
 \end{table}
 
@@ -44,13 +44,13 @@ The comparison is performed in parallel. For each way, a dedicated comparator co
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\textbf{Порты} & \textbf{Направление} & \textbf{Разрядность} & \textbf{Описание} \\
 		\midrule
-		\verb| ways_i | & Input & \verb| WAY_NUM * (TAG_WIDTH + 1) | & Tags and valid bits of all ways belonging to the selected set. \\
-		\verb| examine_tag_i| & Input & \verb| TAG_WIDTH | & Tag of the requested cache line to be compared against all ways. \\
-		\verb| hit_way_o | & Output & \verb| WAY_NUM | & One-hot encoded indication of the way containing the requested tag.. \\
-		\verb| hit_o | & Output & \verb| 1 | & Indicates whether the requested tag was found in any way of the selected set. \\
+		\verb| ways_i | & Вход & \verb| WAY_NUM * (TAG_WIDTH + 1) | & Теги и биты достоверности всех секций выбранного набора. \\
+		\verb| examine_tag_i| & Вход & \verb| TAG_WIDTH | & Тег запрашиваемой строки кэша. \\
+		\verb| hit_way_o | & Выход & \verb| WAY_NUM | & Унитарный код секции, содержащей запрашиваемый тег. \\
+		\verb| hit_o | & Выход & \verb| 1 | & Указывает, найден ли запрашиваемый тег. \\
 		\bottomrule
 	\end{tabularx}
-	\caption{Comparator ports}
+	\caption{Порты модуля Comparator}
 \end{table}

@@ -1,9 +1,8 @@
-\section{Introduction}
+\section{Введение}
 
-The AXI4-Lite Cache is a parameterizable set-associative cache designed to reduce the average memory access latency between a processor and an external memory system.
+AXI4-Lite Cache --- параметризуемый наборно-ассоциативный кэш, снижающий среднюю задержку доступа процессора к внешней памяти.
 
-\subsection{Characteristics}
-This subsection describes the main features and capabilities supported by the AXI4-Lite Cache.
+\subsection{Характеристики}
 
 \begin{table}[htbp]
 	\centering
@@ -11,39 +10,42 @@ This subsection describes the main features and capabilities supported by the AX
 	\small
 	\begin{tabularx}{\textwidth}{l X}
 		\toprule
-		\textbf{Characteristic} & \textbf{Description} \\
+		\textbf{Характеристика} & \textbf{Описание} \\
 		\midrule
 		
-		Configurable Associativity &
-		Configurable number of cache ways. \\
+		\textit{Степень ассоциативности} &
+		Настраиваемое число секций кэша. \\
 		
-		Configurable Address and Data Widths &
-		Configurable address and data widths. \\
+		\textit{Разрядность адреса и данных} &
+		Настраиваемая разрядность адреса и данных. \\
 		
-		Configurable Number of Sets &
-		Configurable number of cache sets. \\
+		\textit{Число наборов} &
+		Настраиваемое число наборов кэша. \\
 		
-		Write-Through Policy with no-allocation&
-		Writes are immediately propagated to external memory. \\
+		\textit{Write through} &
+		Запись немедленно передаётся во внешнюю память. \\
 		
-		NMRU Replacement Policy &
-		Approximation of LRU based on the Not Most Recently Used (NMRU) policy. \\
+		\textit{Стратегия замещения NMRU} &
+		Индекс секции-жерты выбирается случайно, наиболее недавно использованная секция исключается из замещения. \\
 		
-		Data-Width Cache Line &
-		Cache line size is equal to the data width. \\
+		\textit{Размер строки кэша} &
+		Размер строки кэша равен разрядности данных. \\
 		
-		AXI4-Lite Interface &
-		AXI4-Lite interfaces on the CPU and external memory sides. \\
+		\textit{Интерфейс AXI4-Lite} &
+		Интерфейсы AXI4-Lite со стороны процессора и внешней памяти. \\
 		
-		No Outstanding Transactions &
-		Only one cache transaction can be processed at a time.. \\
+		\textit{Нет outstanding транзакций} &
+		Кэш обрабатывает одну транзакцию за раз. \\
 		
-		Hit/Miss Statistics &
-		Hit and miss counters are available during simulation only. \\
+		\textit{Статистика попаданий и промахов} &
+		Подсчёт попаданий и промахов только в симуляции. \\
+
+		\textit{Латентность} &
+		1 такт при попадании в кэш. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Cache characteristics}
+	\caption{Характеристики кэша}
 \end{table}
 
-% --- SECTION 2 ---
+% --- РАЗДЕЛ 2 ---

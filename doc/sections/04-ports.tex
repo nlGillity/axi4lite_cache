@@ -1,205 +1,205 @@
-\section{Ports Description}
+\section{Описание портов}
 
-The cache acts as an AXI4-Lite slave on the CPU side and as an AXI4-Lite master on the external memory side. The following table describes all ports of the cache and their respective directions, widths, and functions.
+Со стороны процессора кэш --- ведомое устройство AXI4-Lite, со стороны внешней памяти --- ведущее.
 
-\begin{table}[htbp]
+\begin{table}[H]
 	\centering
 	\label{tab:cache_ports}
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\textbf{Порты} & \textbf{Направление} & \textbf{Разрядность} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|clk_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		System clock used to synchronize the cache operation. \\
+		Тактовый сигнал кэша. \\
 		
 		\verb|rstn_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Active-low synchronous reset signal. \\
+		Сигнал синхронного сброса с активным низким уровнем. \\
 		
 		\midrule
-		\multicolumn{4}{l}{\textbf{CPU-side AXI4-Lite interface}} \\
+		\multicolumn{4}{l}{\textbf{Интерфейс AXI4-Lite со стороны CPU}} \\
 		\midrule
 		
 		\verb|s_axi_awaddr_i| &
-		Input &
+		Вход &
 		\verb|ADDR_WIDTH| &
-		Write address provided by the CPU. \\
+		Адрес записи. \\
 		
 		\verb|s_axi_awvalid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that a valid write address is available. \\
+		Достоверность адреса записи. \\
 		
 		\verb|s_axi_awready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that the cache is ready to accept a write address. \\
+		Готовность принять адрес записи. \\
 		
 		\verb|s_axi_wdata_i| &
-		Input &
+		Вход &
 		\verb|DATA_WIDTH| &
-		Write data provided by the CPU. \\
+		Данные записи. \\
 		
 		\verb|s_axi_wstrb_i| &
-		Input &
+		Вход &
 		\verb|DATA_WIDTH / 8| &
-		Write byte strobes indicating which bytes of the write data are valid. \\
+		Маска достоверных байтов записи. \\
 		
 		\verb|s_axi_wvalid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that valid write data is available. \\
+		Достоверность данных записи. \\
 		
 		\verb|s_axi_wready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that the cache is ready to accept write data. \\
+		Готовность принять данные записи. \\
 		
 		\verb|s_axi_bresp_o| &
-		Output &
+		Выход &
 		\verb|2| &
-		Write response indicating the result of the write transaction. \\
+		Ответ на запись. \\
 		
 		\verb|s_axi_bvalid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that a valid write response is available. \\
+		Достоверность ответа на запись. \\
 		
 		\verb|s_axi_bready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the CPU is ready to accept the write response. \\
+		Готовность принять ответ на запись. \\
 		
 		\verb|s_axi_araddr_i| &
-		Input &
+		Вход &
 		\verb|ADDR_WIDTH| &
-		Read address provided by the CPU. \\
+		Адрес чтения. \\
 		
 		\verb|s_axi_arvalid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that a valid read address is available. \\
+		Достоверность адреса чтения. \\
 		
 		\verb|s_axi_arready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that the cache is ready to accept a read address. \\
+		Готовность принять адрес чтения. \\
 		
 		\verb|s_axi_rdata_o| &
-		Output &
+		Выход &
 		\verb|DATA_WIDTH| &
-		Read data returned to the CPU. \\
+		Данные чтения. \\
 		
 		\verb|s_axi_rresp_o| &
-		Output &
+		Выход &
 		\verb|2| &
-		Read response indicating the result of the read transaction. \\
+		Ответ на чтение. \\
 		
 		\verb|s_axi_rvalid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that valid read data is available. \\
+		Достоверность данных чтения. \\
 		
 		\verb|s_axi_rready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the CPU is ready to accept the read data. \\
+		Готовность принять данные чтения. \\
 		
 		\midrule
-		\multicolumn{4}{l}{\textbf{External memory-side AXI4-Lite interface}} \\
+		\multicolumn{4}{l}{\textbf{Интерфейс AXI4-Lite со стороны внешней памяти}} \\
 		\midrule
 		
 		\verb|m_axi_awaddr_o| &
-		Output &
+		Выход &
 		\verb|ADDR_WIDTH| &
-		Write address provided to the external memory. \\
+		Адрес записи. \\
 		
 		\verb|m_axi_awvalid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that a valid write address is available. \\
+		Достоверность адреса записи. \\
 		
 		\verb|m_axi_awready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the external memory is ready to accept a write address. \\
+		Готовность принять адрес записи. \\
 		
 		\verb|m_axi_wdata_o| &
-		Output &
+		Выход &
 		\verb|DATA_WIDTH| &
-		Write data provided to the external memory. \\
+		Данные записи. \\
 		
 		\verb|m_axi_wstrb_o| &
-		Output &
+		Выход &
 		\verb|DATA_WIDTH / 8| &
-		Write byte strobes indicating which bytes of the write data are valid. \\
+		Маска достоверных байтов записи. \\
 		
 		\verb|m_axi_wvalid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that valid write data is available. \\
+		Достоверность данных записи. \\
 		
 		\verb|m_axi_wready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the external memory is ready to accept write data. \\
+		Готовность принять данные записи. \\
 		
 		\verb|m_axi_bresp_i| &
-		Input &
+		Вход &
 		\verb|2| &
-		Write response returned by the external memory. \\
+		Ответ на запись. \\
 		
 		\verb|m_axi_bvalid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that a valid write response is available. \\
+		Достоверность ответа на запись. \\
 		
 		\verb|m_axi_bready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that the cache is ready to accept the write response. \\
+		Готовность принять ответ на запись. \\
 		
 		\verb|m_axi_araddr_o| &
-		Output &
+		Выход &
 		\verb|ADDR_WIDTH| &
-		Read address provided to the external memory. \\
+		Адрес чтения. \\
 		
 		\verb|m_axi_arvalid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that a valid read address is available. \\
+		Достоверность адреса чтения. \\
 		
 		\verb|m_axi_arready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the external memory is ready to accept a read address. \\
+		Готовность принять адрес чтения. \\
 		
 		\verb|m_axi_rdata_i| &
-		Input &
+		Вход &
 		\verb|DATA_WIDTH| &
-		Read data returned by the external memory. \\
+		Данные чтения. \\
 		
 		\verb|m_axi_rresp_i| &
-		Input &
+		Вход &
 		\verb|2| &
-		Read response returned by the external memory. \\
+		Ответ на чтение. \\
 		
 		\verb|m_axi_rvalid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that valid read data is available. \\
+		Достоверность данных чтения. \\
 		
 		\verb|m_axi_rready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that the cache is ready to accept the read data. \\
+		Готовность принять данные чтения. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Cache ports}
+	\caption{Порты кэша}
 \end{table}

@@ -5,26 +5,26 @@
 \subsection{Statistics Block}
 \label{subsec:statistics_block}
 
-The Statistics Block provides cache hit and miss statistics for simulation and performance analysis. It receives hit and miss information from the \Comparator and maintains separate counters for cache hits and misses.
+Блок статистики ведёт отдельные счётчики попаданий и промахов по сигналам \Comparator для моделирования и анализа производительности.
 
-The block is enabled by the \verb|DEBUG_ON| parameter. When \verb|DEBUG_ON| is set to \verb|0|, the block is disabled and does not affect the cache implementation.
+Параметр \verb|DEBUG_ON| включает блок. При \verb|DEBUG_ON| = \verb|0| блок отключён и не влияет на реализацию кэша.
 
 \begin{table}[H]
 	\centering
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\textbf{Параметр} & \textbf{Допустимые значения} & \textbf{По умолчанию} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|WIDTH| &
-		Positive integer &
+		Положительное целое &
 		\verb|32| &
-		Width of the registers used to store the number of cache hits and misses. \\
+		Разрядность счётчиков попаданий и промахов. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Statistics Block parameters}
+	\caption{Параметры блока статистики}
 	\label{tab:statistics_block_parameters}
 \end{table}
 
@@ -34,30 +34,30 @@ The block is enabled by the \verb|DEBUG_ON| parameter. When \verb|DEBUG_ON| is s
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\textbf{Порты} & \textbf{Направление} & \textbf{Разрядность} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|valid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the current cache access is valid. \\
+		Достоверность текущего обращения к кэшу. \\
 		
 		\verb|hit_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates whether the current cache access resulted in a hit. \\
+		Указывает, привело ли текущее обращение к кэшу к попаданию. \\
 		
 		\verb|hit_count_o| &
-		Output &
+		Выход &
 		\verb|WIDTH| &
-		Number of recorded cache hits. \\
+		Число зарегистрированных попаданий в кэш. \\
 		
 		\verb|miss_count_o| &
-		Output &
+		Выход &
 		\verb|WIDTH| &
-		Number of recorded cache misses. \\
+		Число зарегистрированных промахов кэша. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Statistics Block ports}
+	\caption{Порты блока статистики}
 \end{table}

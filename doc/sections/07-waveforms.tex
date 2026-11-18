@@ -1,35 +1,35 @@
-\section{Waveforms}
+\section{Временные диаграммы}
 
-This section illustrates the timing and sequence of AXI4-Lite transactions during different cache operations. The waveforms show the interaction between the CPU, the cache, and the external memory for cache hits, cache misses, and write operations.
+Диаграммы показывают обмен между процессором, кэшем и внешней памятью по AXI4-Lite при попаданиях, промахах и записи.
 
 \vspace*{\fill}
-\begin{figure}[h]
+\begin{figure}[H]
 	\includegraphics[width=16cm]{read_hit.png}
-	\caption{Read hit waveform}
+	\caption{Временная диаграмма попадания при чтении}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{read_miss.png}
-	\caption{Read miss waveform (without eviction)}
+	\caption{Временная диаграмма промаха при чтении (без вытеснения строки)}
 \end{figure}
 \vspace*{\fill}
 
 \newpage
 
 \vspace*{\fill}
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=13cm]{write_hit.png}
-	\caption{Write waveform}
+	\caption{Временная диаграмма записи}
 \end{figure}
 \vspace*{\fill}
 
 \newpage
 
 \vspace*{\fill}
-\begin{figure}[ht]
+\begin{figure}[H]
 	\includegraphics[width=17cm]{comb.png}
-	\caption{Sequence of a write and read operation to the same address (the address was initially present in the tag memory)}
+	\caption{Последовательность операций записи и чтения по одному адресу (изначально адрес присутствовал в памяти тегов)}
 \end{figure}
 \vspace*{\fill}

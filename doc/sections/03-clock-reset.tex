@@ -1,5 +1,5 @@
-\section{Clock and Reset}
+\section{Тактирование и сброс}
 
-The AXI4-Lite Cache operates within a single clock domain and a single reset domain. No clock domain crossings are present. The cache uses the \verb|clk_i| signal as its clock and the \verb|rstn_i| signal as an active-low synchronous reset.
+Кэш работает в одном тактовом домене и одном домене сброса: \verb|clk_i| --- тактовый сигнал, \verb|rstn_i| --- синхронный сброс с активным низким уровнем.
 
-During reset, the entire \TagMemory is cleared, including all stored tags and valid bits. The contents of the \DataMemory do not need to be reset, as they are considered invalid until a corresponding valid entry is created in the \TagMemory.
+Сброс очищает все теги и биты достоверности в \TagMemory. Память \DataMemory не сбрасывается: её данные недостоверны, пока в \TagMemory не создана достоверная запись.

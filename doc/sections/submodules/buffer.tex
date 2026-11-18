@@ -5,29 +5,29 @@
 \subsection{Buffer}
 \label{subsec:buffer}
 
-Buffer is a FIFO with a bypass path used to temporarily store incoming transactions. When the buffer is empty, a valid transaction can bypass the storage element and be passed directly to the output without additional latency. If the output is not ready to accept the transaction, it is stored in the FIFO and remains there until it can be forwarded.
+Буфер --- очередь FIFO с обходным трактом. Если буфер пуст, достоверная транзакция проходит на выход комбинационно. Если выход не готов, транзакция хранится в FIFO до передачи.
 
 \begin{table}[H]
 	\centering
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Parameter} & \textbf{Valid Range} & \textbf{Default} & \textbf{Description} \\
+		\textbf{Параметр} & \textbf{Допустимые значения} & \textbf{По умолчанию} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|DATA_WIDTH| &
-		Positive integer &
+		Положительное целое &
 		\verb|32| &
-		Width of the transaction data stored in the buffer. \\
+		Разрядность данных транзакции, хранящихся в буфере. \\
 		
 		\verb|FIFO_DEPTH| &
-		Positive integer &
+		Положительное целое &
 		\verb|1| &
-		Maximum number of transactions that can be stored in the FIFO. \\
+		Максимальное число транзакций, хранящихся в FIFO. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Buffer parameters}
+	\caption{Параметры буфера}
 	\label{tab:buffer_parameters}
 \end{table}
 
@@ -36,41 +36,41 @@ Buffer is a FIFO with a bypass path used to temporarily store incoming transacti
 	\small
 	\begin{tabularx}{\textwidth}{l c c X}
 		\toprule
-		\textbf{Ports} & \textbf{Direction} & \textbf{Width} & \textbf{Description} \\
+		\textbf{Порты} & \textbf{Направление} & \textbf{Разрядность} & \textbf{Описание} \\
 		\midrule
 		
 		\verb|valid_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that a valid transaction is available at the input. \\
+		Наличие достоверной транзакции на входе. \\
 		
 		\verb|ready_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that the buffer can accept a new transaction. \\
+		Готовность буфера принять новую транзакцию. \\
 		
 		\verb|data_i| &
-		Input &
+		Вход &
 		\verb|DATA_WIDTH| &
-		Transaction data to be stored in the buffer. \\
+		Данные транзакции для сохранения в буфере. \\
 		
 		\verb|valid_o| &
-		Output &
+		Выход &
 		\verb|1| &
-		Indicates that a valid transaction is available at the output. \\
+		Наличие достоверной транзакции на выходе. \\
 		
 		\verb|ready_i| &
-		Input &
+		Вход &
 		\verb|1| &
-		Indicates that the downstream logic is ready to accept a transaction. \\
+		Готовность последующей логики принять транзакцию. \\
 		
 		\verb|data_o| &
-		Output &
+		Выход &
 		\verb|DATA_WIDTH| &
-		Transaction data provided at the output. \\
+		Данные транзакции на выходе. \\
 		
 		\bottomrule
 	\end{tabularx}
-	\caption{Buffer ports}
+	\caption{Порты буфера}
 	\label{tab:buffer_ports}
 \end{table}
