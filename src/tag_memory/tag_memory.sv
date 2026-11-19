@@ -46,7 +46,7 @@ module tag_memory #(
   );
 
   // =========================================================================
-  // Memory
+  // Tag Data
   // =========================================================================
 
   logic [WAY_NUM - 1:0] way_onehot;
@@ -54,21 +54,38 @@ module tag_memory #(
 
   generate
     for (genvar i = 0; i < WAY_NUM; i++) begin : gen_mem_bank
-      reg_memory #(
-        .WORD_SIZE ( WORD_WIDTH                           ),
+      memory #(
+        .WORD_SIZE ( TAG_WIDTH                            ),
         .NUM_WORDS ( SET_NUM                              )
       ) mem_bank (
         .clk       ( clk                                  ),
-        .rst_n     ( rst_n                                ),
         .csb0      ( ~fetch_handshake                     ),
         .addr0     ( req_set_i                            ),
-        .dout0     ( tags_o[i * WORD_WIDTH +: WORD_WIDTH] ),
+        .dout0     ( tags_o[i * WORD_WIDTH +: TAG_WIDTH]  ),
         .csb1      ( ~way_onehot[i]                       ),
         .web1      ( ~write_en_i                          ),
         .addr1     ( write_set_i                          ),
-        .din1      ( {write_v_i, write_tag_i}             ),
-        .strb1     ( {WORD_WIDTH{1'b1}}                   )
+        .din1      ( write_tag_i                          ),
+        .strb1     ( {TAG_WIDTH{1'b1}}                    )
       );
+      assign tags_o[i * WORD_WIDTH + TAG_WIDTH] =
+          (rst_n && fetch_handshake) ? valids[i][req_set_i] : 1'b0;
     end
   endgenerate
+
+  // =========================================================================
+  // Valid Bits
+  // =========================================================================
+
+  logic [SET_NUM - 1:0] valids [0:WAY_NUM - 1];
+
+  always_ff @(posedge clk) begin
+    if (!rst_n) begin
+      for (int i = 0; i < WAY_NUM; i++) begin
+        valids[i] <= '0;
+      end
+    end else if (write_en_i) begin
+      valids[write_way_i][write_set_i] <= write_v_i;
+    end
+  end
 endmodule : tag_memory
