@@ -72,8 +72,9 @@ module fetch_stage #(
 
   // Valid from Buffers to Arbiter's write channel
   wire arb_wr_valid;
-  // Valid from Buffers to Arbiter's write channel
+  // Ready from Arbiter to Buffers
   wire arb_wr_ready;
+  wire wr_fire;
 
   // FIFO's for extrnal memory
   // ---------------------------------------------------------------------------
@@ -91,9 +92,9 @@ module fetch_stage #(
   assign arb_wr_valid = (aw_valid & w_valid)          // buffers have valid data 
                       & (~ext_aw_full & ~ext_w_full); // external fifos ready
 
-  assign w_ready  = aw_ready;
-  assign aw_ready = arb_wr_ready                  // arbiter ready
-                  & (~ext_aw_full & ~ext_w_full); // external fifos ready
+  assign wr_fire  = arb_wr_valid && arb_wr_ready;
+  assign aw_ready = wr_fire;
+  assign w_ready  = wr_fire;
 
   // Fetch AW buffer
   buffer #(
@@ -172,7 +173,7 @@ module fetch_stage #(
     .empty_o     ( ext_aw_empty                           ),
     .usage_o     (                                        ),
     .data_i      ( aw_data                                ),
-    .push_i      ( aw_valid & arb_wr_ready & ~ext_aw_full ),
+    .push_i      ( wr_fire                                ),
     .data_o      ( m_axi_awaddr_o                         ),
     .pop_i       ( m_axi_awready_i & ~ext_aw_empty        )
   );
@@ -191,7 +192,7 @@ module fetch_stage #(
     .empty_o     ( ext_w_empty                          ),
     .usage_o     (                                      ),
     .data_i      ( {w_strb, w_data}                     ),
-    .push_i      ( w_valid & arb_wr_ready & ~ext_w_full ),
+    .push_i      ( wr_fire                              ),
     .data_o      ( {m_axi_wstrb_o, m_axi_wdata_o}       ),
     .pop_i       ( m_axi_wready_i & ~ext_w_empty        )
   );
