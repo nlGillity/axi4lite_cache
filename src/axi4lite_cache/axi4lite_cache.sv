@@ -250,7 +250,6 @@ module axi4lite_cache #(
       end
 
       LOOKUP : begin
-        WriteData    = current_hit_ff & current_xact_ff;
         RiseExtMemAR = ~current_hit_ff & ~current_xact_ff;
         RiseExtMemAW = current_xact_ff;
         RiseExtMemW  = current_xact_ff;
@@ -259,17 +258,16 @@ module axi4lite_cache #(
       WAIT_RESPONSE : begin
         case (current_xact_ff)
           1'b0 : begin
-            if ((current_hit_ff | m_axi_rhandshake_ff) & s_axi_rhandshake)
-              Complete = 1'b1;
+            WriteTag  = ~current_hit_ff & m_axi_rhandshake & (m_axi_rresp_i == `OKAY);
+            WriteData = ~current_hit_ff & m_axi_rhandshake & (m_axi_rresp_i == `OKAY);
+            Complete  = (current_hit_ff | m_axi_rhandshake_ff) & s_axi_rhandshake;
           end
           1'b1 : begin
-            if ((current_hit_ff | m_axi_bhandshake_ff) & s_axi_bhandshake)
-              Complete = 1'b1;
+            WriteTag  = ~current_hit_ff & m_axi_bhandshake & (m_axi_bresp_i == `OKAY);
+            WriteData = m_axi_bhandshake & (m_axi_bresp_i == `OKAY);
+            Complete  = (current_hit_ff | m_axi_bhandshake_ff) & s_axi_bhandshake;
           end
         endcase
-
-        WriteData = ~current_hit_ff & Complete;
-        WriteTag  = ~current_hit_ff & Complete;
       end
     endcase
   end
