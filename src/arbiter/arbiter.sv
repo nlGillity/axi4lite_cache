@@ -19,7 +19,7 @@ module arbiter #(
 );
 
   logic grand_ff;
-    
+
   always_ff @(posedge clk) begin : grand_logic
     if (!rst_n) begin
       grand_ff <= INIT_GRAND;
@@ -31,7 +31,7 @@ module arbiter #(
   assign valid_o   = valid_a_i | valid_b_i;
   assign channel_o = grand_ff ? (!valid_a_i | valid_b_i) : (!valid_a_i & valid_b_i);
   assign ready_a_o = ready_i && !channel_o;
-  assign ready_b_o = ready_i &&channel_o;
+  assign ready_b_o = ready_i && channel_o;
   assign data_o    = channel_o ? data_b_i : data_a_i;
 
   `ifdef FORMAL
