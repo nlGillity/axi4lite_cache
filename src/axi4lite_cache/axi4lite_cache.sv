@@ -72,7 +72,7 @@ module axi4lite_cache #(
   // Request valid
   logic fetched_valid;
   // Request ready
-  logiv fetched_ready;
+  logic fetched_ready;
   // WriteData request flag
   logic fetched_xact;
 
@@ -114,22 +114,6 @@ module axi4lite_cache #(
   wire m_axi_bhandshake  = m_axi_bready_o  & m_axi_bvalid_i;
   wire m_axi_rhandshake  = m_axi_rready_o  & m_axi_rvalid_i;
 
-  logic m_axi_rhandshake_ff;
-  logic m_axi_bhandshake_ff;
-
-  always_ff @(posedge clk) begin
-    if (!rst_n) begin
-      m_axi_rhandshake_ff <= 1'b0;
-      m_axi_bhandshake_ff <= 1'b0;
-    end else if (state == WAIT_RESPONSE) begin
-      m_axi_rhandshake_ff <= m_axi_rhandshake;
-      m_axi_bhandshake_ff <= m_axi_bhandshake;
-    end else if (Complete) begin
-      m_axi_rhandshake_ff <= 1'b0;
-      m_axi_bhandshake_ff <= 1'b0;
-    end
-  end
-
   // ===========================================================================
   // FSM
   // ===========================================================================
@@ -142,7 +126,9 @@ module axi4lite_cache #(
   logic RiseExtMemW;
   logic WriteData;
   logic WriteTag;
+
   logic Complete;
+  assign Complete = s_axi_rhandshake || s_axi_bhandshake;
 
   // ---------------------------------------------------------------------------
 
@@ -151,7 +137,6 @@ module axi4lite_cache #(
   logic [ SET_WIDTH - 1:0] current_set;
 
   logic [DATA_WIDTH - 1:0] current_data_ff;
-  logic [DATA_WIDTH - 1:0] current_hit_data_ff;
   logic [STRB_WIDTH - 1:0] current_strb_byte_ff;
   logic [DATA_WIDTH - 1:0] current_strb_bit;
   logic                    current_xact_ff;
@@ -160,6 +145,8 @@ module axi4lite_cache #(
   logic [ WAY_WIDTH - 1:0] current_hit_way_ff;
   logic [DATA_WIDTH - 1:0] current_hit_data_ff;
   logic [ WAY_WIDTH - 1:0] current_victim_ff;
+
+  wire full_write = &current_strb_byte_ff;
 
   assign current_tag = current_addr_ff[ADDR_WIDTH - 1 -: TAG_WIDTH];
   assign current_set = current_addr_ff[OFFSET_WIDTH +: SET_WIDTH];
@@ -182,8 +169,7 @@ module axi4lite_cache #(
   always_ff @(posedge clk) begin
     if (!rst_n) begin
       current_hit_ff <= 1'b0;
-    end
-    if (LookUp) begin
+    end else if (LookUp) begin
       current_hit_ff      <= hit;
       current_hit_way_ff  <= hit_way;
       current_hit_data_ff <= hit_data;
@@ -199,7 +185,8 @@ module axi4lite_cache #(
   typedef enum {
     IDLE,
     LOOKUP,
-    WAIT_RESPONSE
+    WAIT_RESPONSE,
+    WRITE_REFILL
   } state_e;
 
   state_e state, next_state;
@@ -213,6 +200,7 @@ module axi4lite_cache #(
   end
 
   always_comb begin
+    next_state = state;
     case (state)
       IDLE : if (fetched_valid & fetched_ready) begin
         next_state = LOOKUP;
@@ -223,13 +211,16 @@ module axi4lite_cache #(
       end
 
       WAIT_RESPONSE : begin
-        case (current_xact_ff)
-          1'b0 : if (m_axi_rhandshake_ff & s_axi_rhandshake) next_state = IDLE;
-          1'b1 : if (m_axi_bhandshake_ff & s_axi_bhandshake) next_state = IDLE;
-        endcase
+        if (Complete) begin
+          next_state = IDLE;
+        end else if (RiseExtMemAR) begin
+          next_state = WRITE_REFILL;
+        end
       end
 
-      default : next_state = state;
+      WRITE_REFILL : if (m_axi_rhandshake) begin
+        next_state = WAIT_RESPONSE;
+      end
     endcase
   end
 
@@ -241,7 +232,6 @@ module axi4lite_cache #(
     RiseExtMemW  = 1'b0;
     WriteTag     = 1'b0;
     WriteData    = 1'b0;
-    Complete     = 1'b0;
 
     case (state)
       IDLE : if (fetched_valid & fetched_ready) begin
@@ -256,18 +246,22 @@ module axi4lite_cache #(
       end
 
       WAIT_RESPONSE : begin
-        case (current_xact_ff)
-          1'b0 : begin
-            WriteTag  = ~current_hit_ff & m_axi_rhandshake & (m_axi_rresp_i == `OKAY);
-            WriteData = ~current_hit_ff & m_axi_rhandshake & (m_axi_rresp_i == `OKAY);
-            Complete  = (current_hit_ff | m_axi_rhandshake_ff) & s_axi_rhandshake;
+        if (current_xact_ff) begin
+          if (m_axi_bhandshake && (m_axi_bresp_i == `OKAY)) begin
+            WriteTag     = !current_hit_ff && full_write;
+            WriteData    = current_hit_ff || full_write;
+            // A partial write miss needs the other bytes from memory.
+            RiseExtMemAR = !current_hit_ff && !full_write;
           end
-          1'b1 : begin
-            WriteTag  = ~current_hit_ff & m_axi_bhandshake & (m_axi_bresp_i == `OKAY);
-            WriteData = m_axi_bhandshake & (m_axi_bresp_i == `OKAY);
-            Complete  = (current_hit_ff | m_axi_bhandshake_ff) & s_axi_bhandshake;
-          end
-        endcase
+        end else begin
+          WriteTag  = !current_hit_ff && m_axi_rhandshake && (m_axi_rresp_i == `OKAY);
+          WriteData = WriteTag;
+        end
+      end
+
+      WRITE_REFILL : begin
+        WriteTag  = m_axi_rhandshake && (m_axi_rresp_i == `OKAY);
+        WriteData = WriteTag;
       end
     endcase
   end
@@ -340,17 +334,10 @@ module axi4lite_cache #(
   logic [DATA_WIDTH - 1:0] wr_dmem_data;
   logic [DATA_WIDTH - 1:0] wr_dmem_strb;
 
-  always_comb begin
-    if (current_hit_ff) begin
-      wr_dmem_way  = current_hit_way_ff;
-      wr_dmem_data = current_data_ff;
-      wr_dmem_strb = current_strb_bit_ff;
-    end else begin
-      wr_dmem_way  = current_victim_ff;
-      wr_dmem_data = m_axi_rdata_i;
-      wr_dmem_strb = {DATA_WIDTH{1'b1}};
-    end
-  end
+  wire write_from_request = (state == WAIT_RESPONSE) && current_xact_ff;
+  assign wr_dmem_way  = current_hit_ff ? current_hit_way_ff : current_victim_ff;
+  assign wr_dmem_data = write_from_request ? current_data_ff : m_axi_rdata_i;
+  assign wr_dmem_strb = write_from_request ? current_strb_bit : '1;
 
   data_memory #(
     .DATA_WIDTH   ( DATA_WIDTH    ),
@@ -401,14 +388,16 @@ module axi4lite_cache #(
   // Requests to External Memory
   // ---------------------------------------------------------------------------
 
-  assign m_axi_araddr_o = current_addr_ff;
+  assign m_axi_araddr_o = current_xact_ff
+      ? {current_addr_ff[ADDR_WIDTH - 1:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}}
+      : current_addr_ff;
 
   always_ff @(posedge clk) begin : extmem_ar_req
     if (!rst_n) begin
       // No AR request after reset
       m_axi_arvalid_o <= 1'b0;
     end else if (RiseExtMemAR) begin
-      // New AR request after miss occurance
+      // Launch a demand read or a write refill.
       m_axi_arvalid_o <= 1'b1;
     end else if (m_axi_arhandshake) begin
       // Disassert AR request after handshake
@@ -479,7 +468,8 @@ module axi4lite_cache #(
       m_axi_rdata_ff  <= '0;
       m_axi_rresp_ff  <= '0;
       m_axi_rready_o  <= 1'b1;
-    end else if (~m_axi_rvalid_ff & m_axi_rhandshake) begin
+    end else if ((state == WAIT_RESPONSE) && !current_xact_ff && m_axi_rhandshake) begin
+      // Write refills consume R directly without returning it to the CPU.
       m_axi_rvalid_ff <= 1'b1;
       m_axi_rdata_ff  <= m_axi_rdata_i;
       m_axi_rresp_ff  <= m_axi_rresp_i;
@@ -513,12 +503,12 @@ module axi4lite_cache #(
         s_axi_rresp_o  = m_axi_rresp_ff;
       end
       2'b10 : begin
-        s_axi_rvalid_o = 1'b1;
+        s_axi_rvalid_o = (state == WAIT_RESPONSE);
         s_axi_rdata_o  = current_hit_data_ff;
         s_axi_rresp_o  = `OKAY;
       end
       2'b01, 2'b11 : begin
-        s_axi_bvalid_o = m_axi_bvalid_ff;
+        s_axi_bvalid_o = (state == WAIT_RESPONSE) && m_axi_bvalid_ff;
         s_axi_bresp_o  = m_axi_bresp_ff;
       end
     endcase

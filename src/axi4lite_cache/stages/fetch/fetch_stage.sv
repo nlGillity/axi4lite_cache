@@ -51,6 +51,10 @@ module fetch_stage #(
   // CPU <-> Buffers
   // ---------------------------------------------------------------------------
 
+  wire ar_valid;
+  wire ar_ready;
+  wire [ADDR_WIDTH - 1:0] ar_addr;
+
   // Valid signal from AW buffer to Arbiter
   wire aw_valid;
   // Ready signal from Arbiter to AW buffer
@@ -96,6 +100,23 @@ module fetch_stage #(
   assign aw_ready = wr_fire;
   assign w_ready  = wr_fire;
 
+  // Register AR before arbitration so CPU ARREADY depends only on FIFO occupancy.
+  buffer #(
+    .DATA_WIDTH   ( ADDR_WIDTH      ),
+    .DEPTH        ( 1               ),
+    .FALL_THROUGH ( 1'b0            )
+  ) ar_buffer_inst (
+    .clk          ( clk             ),
+    .rst_n        ( rst_n           ),
+
+    .valid_i      ( s_axi_arvalid_i ),
+    .ready_o      ( s_axi_arready_o ),
+    .data_i       ( s_axi_araddr_i  ),
+    .valid_o      ( ar_valid        ),
+    .ready_i      ( ar_ready        ),
+    .data_o       ( ar_addr         )
+  );
+
   // Fetch AW buffer
   buffer #(
     .DATA_WIDTH ( ADDR_WIDTH      ),
@@ -137,13 +158,13 @@ module fetch_stage #(
     .rst_n      ( rst_n           ),
 
     .ready_i    ( fm_ready_i      ),
-    .valid_a_i  ( s_axi_arvalid_i ),
+    .valid_a_i  ( ar_valid        ),
     .valid_b_i  ( arb_wr_valid    ),
-    .data_a_i   ( s_axi_araddr_i  ),
+    .data_a_i   ( ar_addr         ),
     .data_b_i   ( aw_data         ),
 
     .channel_o  ( fm_is_write_o   ),
-    .ready_a_o  ( s_axi_arready_o ),
+    .ready_a_o  ( ar_ready        ),
     .ready_b_o  ( arb_wr_ready    ),
     .valid_o    ( fm_valid_o      ),
     .data_o     ( fm_addr_o       )

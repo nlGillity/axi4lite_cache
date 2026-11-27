@@ -1,6 +1,7 @@
 module buffer #(
-  parameter int unsigned DATA_WIDTH = 32,
-  parameter int unsigned DEPTH      = 1
+  parameter int unsigned DATA_WIDTH   = 32,
+  parameter int unsigned DEPTH        = 1,
+  parameter bit          FALL_THROUGH = 1'b1
 )(
   input  logic                    clk,
   input  logic                    rst_n,
@@ -15,9 +16,9 @@ module buffer #(
 );
 
   cc_stream_fifo #(
-    .FallThrough ( 1'b1       ),
-    .DataWidth   ( DATA_WIDTH ),
-    .Depth       ( DEPTH      )
+    .FallThrough ( FALL_THROUGH ),
+    .DataWidth   ( DATA_WIDTH   ),
+    .Depth       ( DEPTH        )
   ) fifo (
     .clk_i       ( clk        ), 
     .rst_ni      ( rst_n      ), 

@@ -10,23 +10,25 @@ module prg #(
 );
 
   logic [LFSR_WIDTH - 1:0] stage_ff;
+  wire  [LFSR_WIDTH - 1:0] feedback;
+  wire  [LFSR_WIDTH - 1:0] way_offset;
   wire  [LFSR_WIDTH - 1:0] stage_out;
   logic [LFSR_WIDTH - 1:0] poly;
 
-  generate
-    for (genvar i = 0; i < LFSR_WIDTH; i++) begin
-        assign stage_out[i] = ~(stage_ff[i] & exception_i[i]);
-    end
-  endgenerate
+  assign feedback = ~(stage_ff & exception_i);
+
+  // A nonzero offset selects a different way modulo the index width.
+  assign way_offset = (stage_ff == '0) ? LFSR_WIDTH'(1) : stage_ff;
+  assign stage_out  = exception_i + way_offset;
 
   generate
     for (genvar i = 0; i < LFSR_WIDTH; i++) begin
       if (i < LFSR_WIDTH - 1) begin
         assign poly[i] = LFSR_POLY[i] 
-                       ? (stage_out[i] ^ poly[i + 1])
+                       ? (feedback[i] ^ poly[i + 1])
                        : poly[i + 1];
       end else begin
-        assign poly[i] = stage_out[i];
+        assign poly[i] = feedback[i];
       end
     end
   endgenerate
@@ -37,7 +39,7 @@ module prg #(
     end else if (valid_i) begin
       stage_ff[0] <= poly[0];
       for (int i = 1; i < LFSR_WIDTH; i++) begin
-        stage_ff[i] <= stage_out[i - 1];
+        stage_ff[i] <= feedback[i - 1];
       end
     end
   end

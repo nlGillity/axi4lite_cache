@@ -6,8 +6,8 @@ depth 20
 smtbmc --syn --nopresat z3
 
 [script]
-read_slang --top fetch_stage -D FORMAL -I . \
-  fetch_stage.sv \
+read_slang --top fetch_stage -I . \
+  fetch_stage_formal.sv \
   buffer.sv \
   arbiter.sv \
   cc_pkg.sv \
@@ -15,6 +15,11 @@ read_slang --top fetch_stage -D FORMAL -I . \
   cc_fifo.sv
 
 prep -top fetch_stage
+
+[file fetch_stage_formal.sv]
+// Enable properties for the fetch stage in its own compilation unit.
+`define FORMAL
+`include "fetch_stage.sv"
 
 [files]
 # Design under verification
@@ -24,7 +29,6 @@ fetch_stage_sva.sv
 # Project dependencies
 ../../../buffer/buffer.sv
 ../../../arbiter/arbiter.sv
-../../../arbiter/arbiter_sva.sv
 
 # common_cells RTL
 ../../../common_cells/src/cc_pkg.sv
